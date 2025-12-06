@@ -12,11 +12,11 @@ clone:
 	test -d ${TTSREPO} && \
 	echo "${TTSREPO} is exists. Skipping clone." || \
 	git clone https://github.com/${TTSUSER}/${TTSREPO}
-	
+
 	test -d ${STTREPO} && \
 	echo "${STTREPO} is exists. Skipping clone." || \
 	git clone https://github.com/${STTUSER}/${STTREPO}
-	
+
 	test -d ${STTTOTTSREPO} && \
 	echo "${STTTOTTSREPO} is exists. Skipping clone." || \
 	git clone https://github.com/${STTTOTTSUSER}/${STTTOTTSREPO}
@@ -48,3 +48,17 @@ pyenv:
 	(eval "$(pyenv init - bash)")
 	pyenv install 3.13
 	pyenv local 3.13
+init:
+	@if command -v pnpm >/dev/null 2>&1; then \
+		echo "pnpm already installed, skipping global install."; \
+	else \
+		npm install -g pnpm; \
+	fi
+	pnpm install
+
+clean:
+	rm -rf node_modules
+
+start: clean init
+	pnpm run build
+	pnpm run start
